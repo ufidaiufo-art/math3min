@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #5B7CF9;
+    --color-primary-dark: #4A6AE8;
+    --color-primary-light: #EEF2FF;
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-error: #EF4444;
+  }
+
+  * {
+    @apply box-border;
+  }
+
+  html {
+    @apply text-base;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply font-sans antialiased bg-gray-50 text-gray-900;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 
+                 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  }
+}
+
+@layer components {
+  .page-container {
+    @apply max-w-md mx-auto min-h-screen bg-gray-50 shadow-lg;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl shadow-sm;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-white py-3 px-6 rounded-xl font-medium 
+           hover:bg-primary-dark transition-colors shadow-lg shadow-primary/30;
+  }
+
+  .btn-secondary {
+    @apply bg-primary-light text-primary py-3 px-6 rounded-xl font-medium 
+           hover:bg-primary/20 transition-colors;
+  }
+}
+
+@layer utilities {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 2px;
+}
