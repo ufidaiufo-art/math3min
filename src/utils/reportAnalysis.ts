@@ -1,4 +1,4 @@
-import { chapters } from '../data/chapters'
+import { chapters } from '@features/curriculum/grade7/chapters'
 import type { DiagnosisReport } from '../types'
 
 export interface ReportRecommendation {

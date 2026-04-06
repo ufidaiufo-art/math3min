@@ -5,7 +5,7 @@ import {
   getQuestionsByKnowledgePoint,
   getQuestionById,
   type QuestionData 
-} from '../data/questions'
+} from '@features/curriculum/grade7/questions'
 
 export interface AnswerRecord {
   questionId: string

@@ -1,4 +1,4 @@
-﻿import { chapters } from '../data/chapters'
+﻿import { chapters } from '@features/curriculum/grade7/chapters'
 import type { DiagnosisReport } from '../types'
 import {
   buildLocalDiagnosisReport,
@@ -150,3 +150,4 @@ export async function generateDiagnosisReport(input: ReportAnalysisInput): Promi
     window.clearTimeout(timeoutId)
   }
 }
+

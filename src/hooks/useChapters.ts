@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { chapters, getChapterById, type ChapterData } from '../data/chapters'
+import { chapters, getChapterById, type ChapterData } from '@features/curriculum/grade7/chapters'
 
 export interface UseChaptersReturn {
   chapters: ChapterData[]
