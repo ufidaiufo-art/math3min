@@ -123,15 +123,15 @@ interface ProgressState {
  */
 const getInitialChapterProgress = (): Record<string, ChapterProgress> => ({
   ch1: { chapterId: 'ch1', status: 'available', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
-  ch2: { chapterId: 'ch2', status: 'locked', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
-  ch3: { chapterId: 'ch3', status: 'locked', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
-  ch4: { chapterId: 'ch4', status: 'locked', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
-  ch5: { chapterId: 'ch5', status: 'locked', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
-  ch6: { chapterId: 'ch6', status: 'locked', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
-  ch7: { chapterId: 'ch7', status: 'locked', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
-  ch8: { chapterId: 'ch8', status: 'locked', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
-  ch9: { chapterId: 'ch9', status: 'locked', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
-  ch10: { chapterId: 'ch10', status: 'locked', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
+  ch2: { chapterId: 'ch2', status: 'available', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
+  ch3: { chapterId: 'ch3', status: 'available', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
+  ch4: { chapterId: 'ch4', status: 'available', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
+  ch5: { chapterId: 'ch5', status: 'available', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
+  ch6: { chapterId: 'ch6', status: 'available', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
+  ch7: { chapterId: 'ch7', status: 'available', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
+  ch8: { chapterId: 'ch8', status: 'available', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
+  ch9: { chapterId: 'ch9', status: 'available', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
+  ch10: { chapterId: 'ch10', status: 'available', videoProgress: 0, practiceProgress: 0, completedQuestions: 0 },
 })
 
 /**
@@ -544,6 +544,25 @@ export const useProgressStore = create<ProgressState>()(
     }),
     {
       name: 'math3min-progress', // localStorage key
+      version: 2,
+      migrate: (persistedState: any) => {
+        if (!persistedState?.chapterProgress) {
+          return persistedState
+        }
+
+        return {
+          ...persistedState,
+          chapterProgress: Object.fromEntries(
+            Object.entries(persistedState.chapterProgress).map(([chapterId, progress]: [string, any]) => [
+              chapterId,
+              {
+                ...progress,
+                status: progress?.status === 'locked' ? 'available' : progress?.status
+              }
+            ])
+          )
+        }
+      },
       // 持久化部分状态
       partialize: (state) => ({
         totalStudyTime: state.totalStudyTime,

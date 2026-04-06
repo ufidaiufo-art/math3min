@@ -264,7 +264,7 @@ const Home: React.FC = () => {
             // 根据状态获取对应的样式配置
             const config = getStatusConfig(progress?.status || 'locked')
             // 判断章节是否锁定
-            const isLocked = progress?.status === 'locked'
+            const isLocked = false
             
             return (
               <Link 

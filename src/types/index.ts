@@ -126,11 +126,14 @@ export interface DiagnosisReport {
   dimensions: DimensionScore[]
   weakPoints: WeakPoint[]
   recommendedPath: string[]
+  recommendationItems?: RecommendationItem[]
   ranking: {
     rank: number
     total: number
     percentile: number
   }
+  summary?: string
+  advice?: string
 }
 
 export interface DimensionScore {
@@ -148,6 +151,13 @@ export interface WeakPoint {
   masteryRate: number
   wrongCount: number
   suggestion: string
+}
+
+export interface RecommendationItem {
+  type: 'review' | 'practice' | 'wrong'
+  title: string
+  description: string
+  chapterId: string
 }
 
 /**

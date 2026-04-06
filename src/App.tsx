@@ -47,7 +47,7 @@ const Practice = React.lazy(() => import('@pages/Practice'))
 const Result = React.lazy(() => import('@pages/Result'))
 
 /** 学习报告页 - AI诊断、能力分析、薄弱点识别 */
-const Report = React.lazy(() => import('@pages/Report'))
+const Report = React.lazy(() => import('@pages/ReportPage'))
 
 /** 个人中心页 - 用户信息、成就、设置 */
 const Profile = React.lazy(() => import('@pages/Profile'))
