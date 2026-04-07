@@ -1,10 +1,13 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { useGradeRoute } from '@hooks/useGradeRoute'
 
 export const TabBar: React.FC = () => {
+  const { buildGradePath } = useGradeRoute()
+
   const tabs = [
     {
-      path: '/',
+      path: buildGradePath(),
       label: '学习',
       icon: (active: boolean) => (
         <svg className={`w-6 h-6 ${active ? 'text-primary' : 'text-gray-400'}`} fill="currentColor" viewBox="0 0 20 20">
@@ -13,7 +16,7 @@ export const TabBar: React.FC = () => {
       ),
     },
     {
-      path: '/practice/chapter-1',
+      path: buildGradePath('/practice/ch1'),
       label: '练习',
       icon: (active: boolean) => (
         <svg className={`w-6 h-6 ${active ? 'text-primary' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -22,7 +25,7 @@ export const TabBar: React.FC = () => {
       ),
     },
     {
-      path: '/profile',
+      path: buildGradePath('/profile'),
       label: '我的',
       icon: (active: boolean) => (
         <svg className={`w-6 h-6 ${active ? 'text-primary' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">

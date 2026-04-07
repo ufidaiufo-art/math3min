@@ -4,7 +4,7 @@ import { TabBar } from './TabBar'
 
 export const Layout: React.FC = () => {
   const location = useLocation()
-  const hideTabBar = location.pathname === '/wrong-book'
+  const hideTabBar = location.pathname.endsWith('/wrong-book')
 
   return (
     <div className="max-w-md mx-auto min-h-screen bg-gray-50 shadow-lg relative">

@@ -4,7 +4,7 @@ import {
   getKnowledgePointsByChapter, 
   getKnowledgePointById,
   type KnowledgePointData 
-} from '../data/knowledgePoints'
+} from '@features/curriculum/grade7/knowledgePoints'
 
 export interface UseKnowledgePointsReturn {
   knowledgePoints: KnowledgePointData[]
