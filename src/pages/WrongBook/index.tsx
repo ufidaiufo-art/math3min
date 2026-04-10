@@ -1,19 +1,20 @@
 import React, { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { useGradeRoute } from '@hooks/useGradeRoute'
 import { useProgressStore } from '../../stores'
-import { questions } from '../../data/questions'
-import { getChapterById } from '../../data/chapters'
+import type { QuestionData } from '../../data/questions'
 
 // 错题详情类型
 interface WrongQuestionDetail {
   questionId: string
-  question: typeof questions[0]
+  question: QuestionData
   wrongCount: number
   lastWrongAt: string
   isMastered: boolean
 }
 
 const WrongBook: React.FC = () => {
+  const { curriculum, buildGradePath } = useGradeRoute()
   const { 
     wrongQuestions, 
     knowledgePointStats, 
@@ -31,7 +32,7 @@ const WrongBook: React.FC = () => {
     const details: WrongQuestionDetail[] = []
     
     wrongQuestions.forEach((questionId) => {
-      const question = questions.find((q) => q.id === questionId)
+      const question = curriculum.questions.find((q) => q.id === questionId)
       const kpStats = Object.values(knowledgePointStats).find(
         (kp) => kp.knowledgePointId === question?.knowledgePointId
       )
@@ -52,7 +53,7 @@ const WrongBook: React.FC = () => {
       const dateB = b.lastWrongAt ? new Date(b.lastWrongAt).getTime() : 0
       return dateB - dateA
     })
-  }, [wrongQuestions, knowledgePointStats])
+  }, [wrongQuestions, knowledgePointStats, curriculum.questions, isQuestionMastered])
 
   // 筛选后的错题
   const filteredQuestions = useMemo(() => {
@@ -73,7 +74,7 @@ const WrongBook: React.FC = () => {
 
   // 获取章节名称
   const getChapterName = (chapterId: string) => {
-    const chapter = getChapterById(chapterId)
+    const chapter = curriculum.chapters.find((item) => item.id === chapterId)
     return chapter?.title || chapterId
   }
 
@@ -91,7 +92,7 @@ const WrongBook: React.FC = () => {
       <div className="min-h-screen bg-gray-50 pb-24">
         {/* 顶部 */}
         <header className="bg-white px-4 py-4 flex items-center justify-between sticky top-0 z-10 shadow-md">
-          <Link to="/" className="p-2 -ml-2 hover:bg-gray-100 rounded-full">
+          <Link to={buildGradePath()} className="p-2 -ml-2 hover:bg-gray-100 rounded-full">
             <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
             </svg>
@@ -109,7 +110,7 @@ const WrongBook: React.FC = () => {
             温故而知新，错题是进步的阶梯！
           </p>
           <Link 
-            to="/" 
+            to={buildGradePath()} 
             className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg"
           >
             去练习
@@ -123,7 +124,7 @@ const WrongBook: React.FC = () => {
     <div className="min-h-screen bg-gray-50 pb-24">
       {/* 顶部 */}
       <header className="bg-white px-4 py-4 flex items-center justify-between sticky top-0 z-10 shadow-md">
-        <Link to="/" className="p-2 -ml-2 hover:bg-gray-100 rounded-full">
+        <Link to={buildGradePath()} className="p-2 -ml-2 hover:bg-gray-100 rounded-full">
           <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
           </svg>
@@ -268,7 +269,7 @@ const WrongBook: React.FC = () => {
                   {item.isMastered ? '↩ 重新复习' : '✓ 标记掌握'}
                 </button>
                 <Link
-                  to={`/practice/${item.question.chapterId}`}
+                  to={buildGradePath(`/practice/${item.question.chapterId}`)}
                   className="flex-1 bg-blue-100 text-blue-600 py-3 rounded-xl font-bold text-sm text-center hover:bg-blue-200 transition-colors"
                 >
                   去练习
@@ -290,7 +291,7 @@ const WrongBook: React.FC = () => {
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
         <div className="flex space-x-3">
           <Link
-            to="/"
+            to={buildGradePath()}
             className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white py-4 rounded-2xl font-bold text-center shadow-lg"
           >
             练习错题 ({stats.unmastered}道待复习)

@@ -1,7 +1,6 @@
 ﻿import React from 'react'
 import { Link } from 'react-router-dom'
 import { gradeOptions } from '@features/curriculum'
-import { chapters } from '@features/curriculum/grade7/chapters'
 import { useGradeRoute } from '@hooks/useGradeRoute'
 import { useProgressStore } from '../../stores'
 
@@ -19,7 +18,7 @@ const AchievementBadge: React.FC<AchievementBadgeProps> = ({ icon, label, color 
 )
 
 const Home: React.FC = () => {
-  const { gradeId, buildGradePath } = useGradeRoute()
+  const { gradeId, curriculum, buildGradePath } = useGradeRoute()
   const {
     totalQuestions,
     correctCount,
@@ -170,7 +169,7 @@ const Home: React.FC = () => {
         </div>
 
         <div className="space-y-4">
-          {chapters.map((chapter) => {
+          {curriculum.chapters.map((chapter) => {
             const progress = chapterProgress[chapter.id]
             const isCompleted = progress?.status === 'completed'
             const isInProgress = progress?.status === 'in_progress'

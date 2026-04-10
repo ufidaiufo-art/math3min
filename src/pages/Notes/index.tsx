@@ -1,7 +1,7 @@
 ﻿import React, { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useGradeRoute } from '@hooks/useGradeRoute'
-import type { NoteSection } from '@features/curriculum/grade7/notes'
+import type { NoteSection } from '../../data/notes'
 
 interface ParsedTable {
   headers: string[]
@@ -204,10 +204,10 @@ const Notes: React.FC = () => {
               <h2 className="text-xl font-bold text-gray-800">{curriculum.gradeName} 笔记筹备中</h2>
               <p className="mt-2 text-sm leading-6 text-gray-500">{curriculum.description}</p>
               <Link
-                to="/grade7/notes"
+                to={buildGradePath('/notes')}
                 className="mt-5 inline-block rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-500 px-5 py-3 text-sm font-bold text-white"
               >
-                先查看初一笔记
+                返回当前学段笔记
               </Link>
             </div>
           )}
@@ -236,7 +236,7 @@ const Notes: React.FC = () => {
           <div className="space-y-4">
             {chapters.map((chapter) => {
               const notes = getNotesByChapterId(chapter.id)
-              const hasNotes = Boolean(notes)
+              const hasNotes = Boolean(notes && notes.sections.length > 0)
 
               return (
                 <Link

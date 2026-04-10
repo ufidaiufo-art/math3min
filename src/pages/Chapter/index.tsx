@@ -1,28 +1,28 @@
 import React from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { getChapterById, chapters } from '../../data/chapters'
-import { getQuestionsByChapter } from '../../data/questions'
+import { useGradeRoute } from '@hooks/useGradeRoute'
 import { useProgressStore } from '../../stores'
 
 const Chapter: React.FC = () => {
   const { chapterId } = useParams<{ chapterId: string }>()
+  const { curriculum, buildGradePath } = useGradeRoute()
   const navigate = useNavigate()
   const { chapterProgress, totalStudyTime } = useProgressStore()
   
-  const chapter = chapterId ? getChapterById(chapterId) : null
-  const questions = chapterId ? getQuestionsByChapter(chapterId) : []
+  const chapter = chapterId ? curriculum.chapters.find((item) => item.id === chapterId) ?? null : null
+  const questions = chapterId ? curriculum.questions.filter((item) => item.chapterId === chapterId) : []
   const progress = chapterId ? chapterProgress[chapterId] : null
   
-  const currentChapterIndex = chapters.findIndex(c => c.id === chapterId)
-  const prevChapter = currentChapterIndex > 0 ? chapters[currentChapterIndex - 1] : null
-  const nextChapter = currentChapterIndex < chapters.length - 1 ? chapters[currentChapterIndex + 1] : null
+  const currentChapterIndex = curriculum.chapters.findIndex(c => c.id === chapterId)
+  const prevChapter = currentChapterIndex > 0 ? curriculum.chapters[currentChapterIndex - 1] : null
+  const nextChapter = currentChapterIndex < curriculum.chapters.length - 1 ? curriculum.chapters[currentChapterIndex + 1] : null
 
   if (!chapter) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <p className="text-gray-500 mb-4">章节不存在</p>
-          <Link to="/" className="text-indigo-600 font-medium">返回首页</Link>
+          <Link to={buildGradePath()} className="text-indigo-600 font-medium">返回首页</Link>
         </div>
       </div>
     )
@@ -38,7 +38,7 @@ const Chapter: React.FC = () => {
       <header className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between mb-4">
-            <Link to="/" className="p-2 -ml-2 hover:bg-white/10 rounded-full transition-colors">
+            <Link to={buildGradePath()} className="p-2 -ml-2 hover:bg-white/10 rounded-full transition-colors">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
               </svg>
@@ -100,7 +100,7 @@ const Chapter: React.FC = () => {
         <div className="grid grid-cols-2 gap-3">
           {prevChapter && (
             <button 
-              onClick={() => navigate(`/chapter/${prevChapter.id}`)}
+              onClick={() => navigate(buildGradePath(`/chapter/${prevChapter.id}`))}
               className="bg-white rounded-xl p-4 shadow-sm text-left hover:shadow-md transition-shadow"
             >
               <span className="text-xs text-gray-400">上一章</span>
@@ -109,7 +109,7 @@ const Chapter: React.FC = () => {
           )}
           {nextChapter && (
             <button 
-              onClick={() => navigate(`/chapter/${nextChapter.id}`)}
+              onClick={() => navigate(buildGradePath(`/chapter/${nextChapter.id}`))}
               className="bg-white rounded-xl p-4 shadow-sm text-right hover:shadow-md transition-shadow"
             >
               <span className="text-xs text-gray-400">下一章</span>
@@ -123,13 +123,13 @@ const Chapter: React.FC = () => {
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 safe-bottom">
         <div className="flex gap-3">
           <Link 
-            to={`/video/${chapterId}`}
+            to={buildGradePath(`/video/${chapterId}`)}
             className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-medium text-center hover:bg-gray-200 transition-colors"
           >
             📹 看视频
           </Link>
           <Link 
-            to={`/practice/${chapterId}`}
+            to={buildGradePath(`/practice/${chapterId}`)}
             className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-medium text-center hover:opacity-90 transition-opacity shadow-lg shadow-indigo-500/30"
           >
             ✏️ 开始练习

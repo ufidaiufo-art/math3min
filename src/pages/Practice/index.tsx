@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getQuestionsByChapter } from '../../data/questions'
-import { getChapterById } from '../../data/chapters'
+import { useGradeRoute } from '@hooks/useGradeRoute'
 import { useProgressStore } from '../../stores'
 import { StarAnimation, ConfettiEffect, CelebrationModal } from '../../components/effects'
 
@@ -29,6 +28,7 @@ const Practice: React.FC = () => {
   // ==================== URL参数 ====================
   // 从URL获取章节ID，如 /practice/ch1 中的 ch1
   const { chapterId } = useParams<{ chapterId: string }>()
+  const { curriculum, buildGradePath } = useGradeRoute()
 
   // ==================== 状态管理 ====================
   
@@ -53,10 +53,10 @@ const Practice: React.FC = () => {
   // ==================== 计算属性 ====================
   
   // 获取当前章节信息
-  const chapter = chapterId ? getChapterById(chapterId) : null
+  const chapter = chapterId ? curriculum.chapters.find((item) => item.id === chapterId) ?? null : null
   
   // 获取当前章节的题目列表
-  const questions = chapterId ? getQuestionsByChapter(chapterId) : []
+  const questions = chapterId ? curriculum.questions.filter((item) => item.chapterId === chapterId) : []
   
   // 获取当前题目
   const currentQuestion = questions[currentIndex] || null
@@ -180,7 +180,7 @@ const Practice: React.FC = () => {
           <p className="text-xs text-gray-400 mb-4">章节ID: {chapterId || 'undefined'}</p>
           <p className="text-xs text-gray-400 mb-4">章节对象: {chapter ? '存在' : '不存在'}</p>
           <p className="text-xs text-gray-400 mb-4">题目数量: {questions.length}</p>
-          <Link to="/" className="inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-xl font-bold">
+          <Link to={buildGradePath()} className="inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-xl font-bold">
             返回首页
           </Link>
         </div>
@@ -197,7 +197,7 @@ const Practice: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* 顶部导航 - 显示章节标题、当前题号、进度条、正确率 */}
       <header className="bg-white px-4 py-4 flex items-center justify-between sticky top-0 z-10 shadow-md">
-        <Link to={`/video/${chapterId}`} className="p-3 hover:bg-gray-100 rounded-2xl transition-colors">
+        <Link to={buildGradePath(`/video/${chapterId}`)} className="p-3 hover:bg-gray-100 rounded-2xl transition-colors">
           <svg className="w-7 h-7 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7"/>
           </svg>

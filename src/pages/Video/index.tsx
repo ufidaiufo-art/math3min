@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getChapterById } from '../../data/chapters'
-import { getKnowledgePointsByChapter } from '../../data/knowledgePoints'
+import { useGradeRoute } from '@hooks/useGradeRoute'
 import { useProgressStore } from '../../stores'
 import BilibiliPlayer from '../../components/common/BilibiliPlayer'
 
 const Video: React.FC = () => {
   const { chapterId } = useParams<{ chapterId: string }>()
+  const { curriculum, buildGradePath } = useGradeRoute()
   const [currentKpIndex, setCurrentKpIndex] = useState(0)
   const [videoCompleted, setVideoCompleted] = useState(false)
   const { chapterProgress, updateChapterProgress } = useProgressStore()
 
-  const chapter = chapterId ? getChapterById(chapterId) : null
-  const knowledgePoints = chapterId ? getKnowledgePointsByChapter(chapterId) : []
+  const chapter = chapterId ? curriculum.chapters.find((item) => item.id === chapterId) ?? null : null
+  const knowledgePoints = chapterId
+    ? curriculum.knowledgePoints.filter((item) => item.chapterId === chapterId)
+    : []
   const currentKP = knowledgePoints[currentKpIndex] || null
-  const progress = chapterId ? chapterProgress[chapterId] : null
 
   // 切换到下一个知识点
   const handleNext = () => {
@@ -49,7 +50,7 @@ const Video: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-500">章节不存在</p>
-          <Link to="/" className="text-primary mt-2 inline-block">返回首页</Link>
+          <Link to={buildGradePath()} className="text-primary mt-2 inline-block">返回首页</Link>
         </div>
       </div>
     )
@@ -59,7 +60,7 @@ const Video: React.FC = () => {
     <div className="min-h-screen flex flex-col">
       {/* 顶部导航 */}
       <header className="bg-white px-4 py-3 flex items-center justify-between sticky top-0 z-10 shadow-sm">
-        <Link to="/" className="p-2 -ml-2 hover:bg-gray-100 rounded-full">
+        <Link to={buildGradePath()} className="p-2 -ml-2 hover:bg-gray-100 rounded-full">
           <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
           </svg>
@@ -90,7 +91,7 @@ const Video: React.FC = () => {
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 pointer-events-none">
           <div className="h-1 bg-white/30 rounded-full overflow-hidden">
             <div className="h-full bg-primary rounded-full relative" style={{ width: `${((currentKpIndex + 1) / knowledgePoints.length) * 100}%` }}>
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow" />
+              <div className="absolute right-0 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white shadow" />
             </div>
           </div>
           <div className="flex justify-between text-xs text-white/80 mt-1">
@@ -190,7 +191,7 @@ const Video: React.FC = () => {
             </button>
           ) : (
             <Link 
-              to={`/practice/${chapterId}`}
+              to={buildGradePath(`/practice/${chapterId}`)}
               onClick={handleVideoComplete}
               className="flex-1 bg-primary text-white py-3 rounded-xl font-medium text-center hover:bg-primary-dark transition-colors shadow-lg shadow-primary/30"
             >
