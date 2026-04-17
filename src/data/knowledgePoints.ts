@@ -8,10 +8,14 @@ export interface KnowledgePointData {
   videoUrl?: string // B站视频嵌入链接 (如 //player.bilibili.com/player.html?bvid=BV1xx411c7mD)
   videoBvid?: string // B站BV号 (如 BV1xx411c7mD)
   videoPage?: number // B站视频分P号（从1开始）
-  example: {
+  example?: {
     question: string
     analysis: string
   }
+  examples?: {
+    question: string
+    analysis: string
+  }[]
   exercises: {
     id: string
     question: string

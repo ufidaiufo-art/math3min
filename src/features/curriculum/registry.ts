@@ -22,6 +22,18 @@ import {
 import {
   questions as grade8Questions,
 } from './grade8/questions.bundle'
+import {
+  chapters as grade9Chapters,
+} from './grade9/chapters'
+import {
+  knowledgePoints as grade9KnowledgePoints,
+} from './grade9/knowledgePoints'
+import {
+  allNotes as grade9Notes,
+} from './grade9/notes'
+import {
+  questions as grade9Questions,
+} from './grade9/questions'
 import type { CurriculumBundle, GradeId } from './types'
 
 export const DEFAULT_GRADE_ID: GradeId = 'grade7'
@@ -66,12 +78,17 @@ export const curriculumRegistry: Record<GradeId, CurriculumBundle> = {
     notes: grade8Notes,
     questions: grade8Questions,
   },
-  grade9: emptyBundle(
-    'grade9',
-    '初三数学',
-    '初三',
-    '初三内容筹备中，后续可直接接入中考专题与综合复习内容。'
-  ),
+  grade9: {
+    gradeId: 'grade9',
+    gradeName: '初三数学',
+    shortLabel: '初三',
+    enabled: true,
+    description: '已接入初三 8 个中考专题，覆盖函数、方程、统计、几何与压轴入门的完整冲刺主线。',
+    chapters: grade9Chapters,
+    knowledgePoints: grade9KnowledgePoints,
+    notes: grade9Notes,
+    questions: grade9Questions,
+  },
 }
 
 export const gradeOptions = Object.values(curriculumRegistry).map((bundle) => ({

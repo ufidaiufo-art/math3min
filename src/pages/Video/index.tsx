@@ -16,6 +16,11 @@ const Video: React.FC = () => {
     ? curriculum.knowledgePoints.filter((item) => item.chapterId === chapterId)
     : []
   const currentKP = knowledgePoints[currentKpIndex] || null
+  const examples = currentKP?.examples?.length
+    ? currentKP.examples
+    : currentKP?.example
+      ? [currentKP.example]
+      : []
 
   // 切换到下一个知识点
   const handleNext = () => {
@@ -147,15 +152,23 @@ const Video: React.FC = () => {
 
             {/* 典型例题 */}
             <div className="bg-white rounded-2xl p-4 shadow-sm mb-4">
-              <div className="flex items-center mb-3">
+              <div className="flex items-center justify-between mb-3">
                 <span className="bg-orange-100 text-orange-600 text-xs px-2 py-1 rounded-full font-medium">典型例题</span>
+                <span className="text-xs text-gray-400">共{examples.length}题</span>
               </div>
-              <p className="text-gray-800 mb-3">{currentKP.example.question}</p>
-              <div className="bg-orange-50 rounded-xl p-3">
-                <p className="text-sm text-gray-700">
-                  <span className="text-orange-600 font-medium">解析：</span>
-                  {currentKP.example.analysis}
-                </p>
+              <div className="space-y-3">
+                {examples.map((example, index) => (
+                  <div key={index} className="rounded-2xl border border-orange-100 bg-orange-50/60 p-3">
+                    <p className="mb-2 text-xs font-medium text-orange-600">例题 {index + 1}</p>
+                    <p className="text-gray-800 mb-3">{example.question}</p>
+                    <div className="bg-white rounded-xl p-3">
+                      <p className="text-sm text-gray-700">
+                        <span className="text-orange-600 font-medium">解析：</span>
+                        {example.analysis}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 

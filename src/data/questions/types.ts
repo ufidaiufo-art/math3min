@@ -42,6 +42,7 @@ export interface QuestionData {
   year?: string
   district?: string
   examType?: string
+  trainingStage?: 'basic' | 'method' | 'comprehensive'
   // 增强解析功能
   thinking?: string // 解题思路说明
   steps?: SolutionStep[] // 详细解题步骤

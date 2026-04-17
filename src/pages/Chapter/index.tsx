@@ -3,6 +3,18 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useGradeRoute } from '@hooks/useGradeRoute'
 import { useProgressStore } from '../../stores'
 
+type TrainingStageShortcut = 'basic' | 'method' | 'comprehensive'
+
+const TRAINING_STAGE_SHORTCUTS: Array<{
+  value: TrainingStageShortcut
+  label: string
+  icon: string
+}> = [
+  { value: 'basic', label: '基础', icon: '🧱' },
+  { value: 'method', label: '方法', icon: '🛠️' },
+  { value: 'comprehensive', label: '综合', icon: '🚀' },
+]
+
 const Chapter: React.FC = () => {
   const { chapterId } = useParams<{ chapterId: string }>()
   const { curriculum, buildGradePath } = useGradeRoute()
@@ -49,6 +61,9 @@ const Chapter: React.FC = () => {
           
           <h1 className="text-2xl font-bold mb-2">{chapter.title}</h1>
           <p className="text-white/80 text-sm mb-4">{chapter.subtitle}</p>
+          <div className="mb-4 rounded-2xl bg-white/10 px-4 py-3 text-sm leading-6 text-white/90 backdrop-blur-sm">
+            本专题导读：{chapter.description}
+          </div>
           
           {/* Progress card */}
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4">
@@ -76,7 +91,7 @@ const Chapter: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-sm p-4 mb-4">
           <h3 className="font-bold text-gray-800 mb-4 flex items-center">
             <span className="w-1 h-5 bg-indigo-600 rounded-full mr-2"></span>
-            知识点
+            本专题主线
           </h3>
           <div className="space-y-3">
             {chapter.sections.map((section, index) => (
@@ -90,7 +105,7 @@ const Chapter: React.FC = () => {
                   </span>
                   <span className="text-gray-700">{section}</span>
                 </div>
-                <span className="text-xs text-gray-400">待练习</span>
+                <span className="text-xs text-gray-400">可切入</span>
               </div>
             ))}
           </div>
@@ -121,6 +136,24 @@ const Chapter: React.FC = () => {
 
       {/* Bottom Actions */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 safe-bottom">
+        <div className="mb-3 rounded-2xl bg-gray-50 p-3">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-sm font-bold text-gray-700">分层练习直达</span>
+            <span className="text-xs text-gray-400">按当前章节进入</span>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            {TRAINING_STAGE_SHORTCUTS.map((shortcut) => (
+              <Link
+                key={shortcut.value}
+                to={buildGradePath(`/practice/${chapterId}?stage=${shortcut.value}`)}
+                className="rounded-xl border border-indigo-100 bg-white px-3 py-3 text-center text-sm font-medium text-indigo-600 transition-colors hover:bg-indigo-50"
+              >
+                <div className="mb-1 text-base">{shortcut.icon}</div>
+                <div>{shortcut.label}</div>
+              </Link>
+            ))}
+          </div>
+        </div>
         <div className="flex gap-3">
           <Link 
             to={buildGradePath(`/video/${chapterId}`)}

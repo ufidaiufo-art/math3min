@@ -32,6 +32,28 @@ const Home: React.FC = () => {
   const correctRate = getCorrectRate()
   const completedCount = Object.values(chapterProgress).filter((item: any) => item.status === 'completed').length
 
+  const getChapterTrackLabel = (chapterTitle: string): string => {
+    if (chapterTitle.includes('统计与概率')) {
+      return '稳分专题'
+    }
+    if (chapterTitle.includes('几何综合')) {
+      return '几何综合'
+    }
+    if (chapterTitle.includes('代数综合')) {
+      return '压轴入门'
+    }
+    if (chapterTitle.includes('二次函数') || chapterTitle.includes('反比例函数')) {
+      return '函数主干'
+    }
+    if (chapterTitle.includes('方程')) {
+      return '代数主干'
+    }
+    if (chapterTitle.includes('圆') || chapterTitle.includes('相似') || chapterTitle.includes('三角函数')) {
+      return '几何主干'
+    }
+    return '专题复习'
+  }
+
   const achievementList = [
     {
       icon: achievements.includes('streak_7') || studyStreak >= 7 ? '🔥' : '🔒',
@@ -161,12 +183,18 @@ const Home: React.FC = () => {
       <main className="mt-6 p-4 pb-28">
         <div className="mb-5 flex items-center justify-between">
           <h3 className="flex items-center text-xl font-bold text-gray-800">
-            <span className="mr-2 text-2xl">🗺️</span> 知识地图
+            <span className="mr-2 text-2xl">🗺️</span> {gradeId === 'grade9' ? '专题地图' : '知识地图'}
           </h3>
           <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-600">
             {gradeOptions.find((grade) => grade.id === gradeId)?.name || '初一数学'}
           </span>
         </div>
+
+        {gradeId === 'grade9' && (
+          <div className="mb-4 rounded-2xl border border-orange-100 bg-orange-50 px-4 py-3 text-sm leading-6 text-orange-700">
+            当前初三内容已整理成 8 个中考专题，形成从“函数主干 → 代数主干 → 几何主干 → 稳分专题 → 压轴入门”的完整冲刺地图。
+          </div>
+        )}
 
         <div className="space-y-4">
           {curriculum.chapters.map((chapter) => {
@@ -207,6 +235,19 @@ const Home: React.FC = () => {
 
                     <h4 className="text-lg font-bold text-gray-800">第{chapter.order}章 {chapter.title}</h4>
                     <p className="mt-1 text-sm text-gray-500">{chapter.subtitle}</p>
+
+                    {gradeId === 'grade9' && (
+                      <div className="mt-2 flex items-center gap-2">
+                        <span className="rounded-full bg-indigo-50 px-2 py-1 text-xs font-bold text-indigo-600">
+                          {getChapterTrackLabel(chapter.title)}
+                        </span>
+                        <span className="text-xs text-gray-400">中考专题包</span>
+                      </div>
+                    )}
+
+                    {gradeId === 'grade9' && (
+                      <p className="mt-2 text-xs leading-5 text-gray-500">{chapter.description}</p>
+                    )}
 
                     <div className="mt-3 flex items-center text-sm font-medium text-gray-500">
                       <span className="mr-4 flex items-center">⏱️ {chapter.estimatedTime}分钟</span>
